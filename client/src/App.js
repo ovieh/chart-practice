@@ -73,7 +73,12 @@ const App = () => {
 
   const callApi = async () => {
     const response = await fetch('/api/coords');
-    const body = await response.json();
+    let body = [];
+    try {
+      body = await response.json();
+    }catch(error) {
+      console.log(error);
+    }
 
     if(response.status !== 200) throw Error(body.message);
     return body;
