@@ -1,16 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, } from 'react';
+import regression from 'regression';
+import {
+  XYPlot,
+  YAxis,
+  XAxis,
+  LineSeries,
+  MarkSeries,
+  HorizontalGridLines,
+  VerticalGridLines
+} from 'react-vis';
+import '../node_modules/react-vis/dist/style.css';
 import './App.css';
 
+const lineReg = (data) => {
+  let pointArray = [];
+
+  Object.keys(data).forEach((key) => {
+    pointArray.push([data[key].x,data[key].y])
+  });
+
+  const result = regression.linear(pointArray);
+  const gradient = result.equation[0];
+  const yInt = result.equation[1];
+  const prediction = result.predict(20);
+
+  console.log(prediction);
+
+  const regressionData = result.points.map(el => {
+    return {
+      x: el[0],
+      y: el[1]
+    }
+  })
+
+  return {
+    regressionData,
+    gradient,
+    yInt,
+    prediction
+  }
+}
+
+
 const App = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
+  const [equation, setEquation] = useState([]);
+  
+  
 
   useEffect(() => { 
     async function fetchData() {
       const result = await callApi();
       setData(result);
+      setEquation(lineReg(result));
+
     }
     fetchData();
+
   }, []);
+
 
   const callApi = async () => {
     const response = await fetch('/api/coords');
@@ -38,6 +86,25 @@ const App = () => {
   return (
     <div className="App">
       <div className="container">
+        <div className="chart">
+          <XYPlot
+            width={500}
+            height={500} 
+          >
+            <HorizontalGridLines />
+            <VerticalGridLines />
+            <MarkSeries
+              className="scatter"
+              data={data}
+            />
+            <LineSeries
+              color="red"
+              data={equation.regressionData} />
+            <XAxis />
+            <YAxis />
+          </XYPlot>          
+        </div>
+
         <Table>
             {
               Object.keys(data).map((key, index) => (
@@ -48,7 +115,7 @@ const App = () => {
               ))
             }
           </Table>
-
+          {console.log(equation)}
       </div>
 
     </div>

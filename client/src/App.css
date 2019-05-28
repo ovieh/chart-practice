@@ -6,7 +6,15 @@
   display: flex;
   justify-content: center;
   align-content: center;
+  /* width: 80%; */
+
 }
+
+/* .chart {
+  width: 70%;
+} */
+
+
 
 
 table {
