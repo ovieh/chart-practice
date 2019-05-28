@@ -22,7 +22,7 @@ const lineReg = (data) => {
   const result = regression.linear(pointArray);
   const gradient = result.equation[0];
   const yInt = result.equation[1];
-  const prediction = result.predict(20);
+  const prediction = result.predict(70);
 
   console.log(prediction);
 
@@ -46,6 +46,9 @@ const App = () => {
   const [data, setData] = useState([]);
   const [equation, setEquation] = useState([]);
   
+  const showTrendline = () => {
+
+  }
   
 
   useEffect(() => { 
@@ -98,7 +101,7 @@ const App = () => {
               data={data}
             />
             <LineSeries
-              color="red"
+              // color="red"
               data={equation.regressionData} />
             <XAxis />
             <YAxis />
@@ -115,6 +118,7 @@ const App = () => {
               ))
             }
           </Table>
+          <button onClick={showTrendline}>Show Trendline</button>
           {console.log(equation)}
       </div>
 
