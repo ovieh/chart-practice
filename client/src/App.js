@@ -46,9 +46,10 @@ const lineReg = (data) => {
 const App = () => {
   const [data, setData] = useState([]);
   const [equation, setEquation] = useState({});
+  const [visibility, setVisibility] = useState({});
   
   const showTrendline = () => {
-
+    setVisibility(!visibility)
   }
   
 
@@ -61,6 +62,8 @@ const App = () => {
       }
       setData(dataSet);
       setEquation(await lineReg(dataSet));
+      
+      setVisibility(false)
 
     }
     fetchData();
@@ -111,23 +114,22 @@ const App = () => {
               ))
             }
             {
-              equation.regressionDataArr &&
+              equation.regressionDataArr && visibility &&
               equation.regressionDataArr.map((el,index) => (
+                
                 <LineSeries
-                // color="red"
-                key={index}
-                data={equation.regressionDataArr[index]} />
+                  key={index}
+                  data={equation.regressionDataArr[index]} 
+                />
               ))
-     
-            
             }
-
-
-              
             <XAxis />
             <YAxis />
-          </XYPlot>          
+          </XYPlot> 
+        <button onClick={showTrendline}>Show Trendlines</button>
+
         </div>
+
 {/* 
         <Table>
             {
@@ -139,9 +141,8 @@ const App = () => {
               ))
             }
           </Table> */}
-          {/* <button onClick={showTrendline}>Show Trendline</button> */}
       </div>
-      {console.log(equation.regressionDataArr && equation.regressionDataArr[0])}
+      {console.log(visibility)}
     </div>
   );
 }
