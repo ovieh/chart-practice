@@ -13,38 +13,39 @@ import '../node_modules/react-vis/dist/style.css';
 import './App.css';
 
 const lineReg = (data) => {
-  let pointArray = [];
+  const regressionDataArr = [];
+  console.log(data)
 
-  Object.keys(data).forEach((key) => {
-    pointArray.push([data[key].x,data[key].y])
-  });
+  for(let i=0;i<data.length;i++){
+    let pointArray = [];
+  
+    Object.keys(data[i]).forEach((key) => {
+      pointArray.push([data[i][key].x,data[i][key].y])
+    });  
+  
+    const result = regression.linear(pointArray);
+  
+    const regressionData = result.points.map(el => {
+      return {
+        x: el[0],
+        y: el[1]
+      }
+    });
 
-  const result = regression.linear(pointArray);
-  const gradient = result.equation[0];
-  const yInt = result.equation[1];
-  const prediction = result.predict(70);
+    regressionDataArr.push(regressionData)
+  }
 
-  console.log(prediction);
-
-  const regressionData = result.points.map(el => {
-    return {
-      x: el[0],
-      y: el[1]
-    }
-  })
+  console.log(regressionDataArr[0][0])
 
   return {
-    regressionData,
-    gradient,
-    yInt,
-    prediction
+    regressionDataArr 
   }
 }
 
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [equation, setEquation] = useState([]);
+  const [equation, setEquation] = useState({});
   
   const showTrendline = () => {
 
@@ -53,9 +54,13 @@ const App = () => {
 
   useEffect(() => { 
     async function fetchData() {
-      const result = await callApi();
-      setData(result);
-      setEquation(lineReg(result));
+      const dataSet = [];
+      // const result = await callApi();
+      for(let i=0;i<3;i++){
+        dataSet.push(await callApi());
+      }
+      setData(dataSet);
+      setEquation(await lineReg(dataSet));
 
     }
     fetchData();
@@ -96,18 +101,34 @@ const App = () => {
           >
             <HorizontalGridLines />
             <VerticalGridLines />
-            <MarkSeries
-              className="scatter"
-              data={data}
-            />
-            <LineSeries
-              // color="red"
-              data={equation.regressionData} />
+            {
+              data.map((el, index) => (
+                <MarkSeries
+                  className="scatter"
+                  data={data[index]}
+                  key={index}
+                />
+              ))
+            }
+            {
+              equation.regressionDataArr &&
+              equation.regressionDataArr.map((el,index) => (
+                <LineSeries
+                // color="red"
+                key={index}
+                data={equation.regressionDataArr[index]} />
+              ))
+     
+            
+            }
+
+
+              
             <XAxis />
             <YAxis />
           </XYPlot>          
         </div>
-
+{/* 
         <Table>
             {
               Object.keys(data).map((key, index) => (
@@ -117,11 +138,10 @@ const App = () => {
                 </tr>
               ))
             }
-          </Table>
-          <button onClick={showTrendline}>Show Trendline</button>
-          {console.log(equation)}
+          </Table> */}
+          {/* <button onClick={showTrendline}>Show Trendline</button> */}
       </div>
-
+      {console.log(equation.regressionDataArr && equation.regressionDataArr[0])}
     </div>
   );
 }
