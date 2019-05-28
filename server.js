@@ -7,15 +7,25 @@ const logger = require('morgan');
 
 const createCoords = () => {
   return new Promise((resolve, reject) => {
-    const arr = [];
+    const xArr = [];
+    const yArr = [];
+    const pointArr = [];
 
     for(let i=0;i<10;i++){
-      arr.push({
-        x: Math.floor(Math.random()*10),
-        y: Math.floor(Math.random()*90)
+      xArr.push(Math.floor(Math.random()*800) / 10)
+      yArr.push(Math.floor(Math.random()*100) / 10)
+
+    }
+    xArr.sort((a,b) => a-b)
+    yArr.sort((a,b) => a-b)
+
+    for(let i=0;i<10;i++){
+      pointArr.push({
+        x: xArr[i],
+        y: yArr[i]
       })
     }
-    resolve(arr);
+    resolve(pointArr);
   })
 }
 
