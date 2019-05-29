@@ -47,6 +47,8 @@ const App = () => {
   const [data, setData] = useState([]);
   const [equation, setEquation] = useState({});
   const [visibility, setVisibility] = useState({});
+
+  const myPalette = ["#1A3177", "#79C7E3", "#12939A"];
   
   const showTrendline = () => {
     setVisibility(!visibility)
@@ -115,6 +117,7 @@ const App = () => {
                   className="scatter"
                   data={data[index]}
                   key={index}
+                  color={myPalette[index]}
                 />
               ))
             }
@@ -125,6 +128,7 @@ const App = () => {
                 <LineSeries
                   key={index}
                   data={equation.regressionDataArr[index]} 
+                  color={myPalette[index]}
                 />
               ))
             }
@@ -147,7 +151,7 @@ const App = () => {
             }
           </Table> */}
       </div>
-      {console.log(visibility)}
+      {console.log(myPalette[0])}
     </div>
   );
 }
