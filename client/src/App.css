@@ -10,9 +10,10 @@
 
 }
 
-/* .chart {
-  width: 70%;
-} */
+.chart {
+  /* width: 100%; */
+  margin: 20px;
+}
 
 
 
@@ -20,7 +21,10 @@
 table {
   text-align: left;
   border-collapse: collapse;
-  width: 10vh;
+  width: 100px;
+  margin-top: 20px;
+  margin-left: 5px;
+
 }
 
 td, th {

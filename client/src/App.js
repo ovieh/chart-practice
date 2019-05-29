@@ -106,8 +106,9 @@ const App = () => {
       <div className="container">
         <div className="chart">
           <XYPlot
-            width={500}
-            height={500} 
+            width={400}
+            height={400} 
+
           >
             <HorizontalGridLines />
             <VerticalGridLines />
@@ -132,26 +133,32 @@ const App = () => {
                 />
               ))
             }
-            <XAxis />
-            <YAxis />
+            <XAxis title="X-Axis" />
+            <YAxis title="Y-Axis"/>
           </XYPlot> 
         <button onClick={showTrendline}>Show Trendlines</button>
 
         </div>
-
-{/* 
-        <Table>
-            {
-              Object.keys(data).map((key, index) => (
+        
+        {
+          data.map((el, i) => (
+            <Table key={i}>
+            {data[0] &&
+              Object.keys(data[i]).map((key, index) => (
                 <tr key={index}>
-                    <td>{data[key].x}</td>
-                    <td>{data[key].y}</td>
+                    <td>{data[i][key].x}</td>
+                    <td>{data[i][key].y}</td>
                 </tr>
               ))
             }
-          </Table> */}
+           </Table> 
+
+          ))
+        }
+
+
       </div>
-      {console.log(myPalette[0])}
+      {data[0] && console.log(data)}
     </div>
   );
 }
